@@ -1,6 +1,7 @@
 from django.db.backends.postgresql.features import (
     DatabaseFeatures as PostgresDatabaseFeatures,
 )
+from django.utils.functional import cached_property
 
 
 class DatabaseFeatures(PostgresDatabaseFeatures):
@@ -43,8 +44,16 @@ class DatabaseFeatures(PostgresDatabaseFeatures):
     # test) isn't implemented: https://github.com/cockroachdb/cockroach/issues/41649
     can_introspect_materialized_views = False
 
-    introspected_big_auto_field_type = 'BigIntegerField'
-    introspected_small_auto_field_type = 'BigIntegerField'
+    @cached_property
+    def introspected_field_types(self):
+        return {
+            **super().introspected_field_types,
+            'AutoField': 'BigIntegerField',
+            'BigAutoField': 'BigIntegerField',
+            'IntegerField': 'BigIntegerField',
+            'PositiveIntegerField': 'BigIntegerField',
+            'SmallAutoField': 'BigIntegerField',
+        }
 
     # adding a REFERENCES constraint while also adding a column via ALTER not
     # supported: https://github.com/cockroachdb/cockroach/issues/32917

@@ -75,6 +75,7 @@ class DatabaseCreation(PostgresDatabaseCreation):
             'fixtures.tests.ForwardReferenceTests.test_forward_reference_fk',
             'fixtures.tests.ForwardReferenceTests.test_forward_reference_m2m',
             'serializers.test_data.SerializerDataTests.test_json_serializer',
+            'serializers.test_data.SerializerDataTests.test_jsonl_serializer',
             'serializers.test_data.SerializerDataTests.test_python_serializer',
             'serializers.test_data.SerializerDataTests.test_xml_serializer',
             'serializers.test_data.SerializerDataTests.test_yaml_serializer',
@@ -147,6 +148,8 @@ class DatabaseCreation(PostgresDatabaseCreation):
             'model_fields.test_jsonfield.TestQuerying.test_deep_lookup_transform',
             # excluding null json keys incorrectly returns values where the
             # key doesn't exist: https://github.com/cockroachdb/cockroach/issues/49143
+            'model_fields.test_jsonfield.TestQuerying.test_lookup_exclude',
+            'model_fields.test_jsonfield.TestQuerying.test_lookup_exclude_nonexistent_key',
             'model_fields.test_jsonfield.TestQuerying.test_none_key_exclude',
             # ordering by JSON isn't supported:
             # https://github.com/cockroachdb/cockroach/issues/35706
