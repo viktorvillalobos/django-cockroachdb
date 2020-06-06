@@ -1,7 +1,7 @@
-from django.db.backends.base.introspection import TableInfo
-from django.db.backends.postgresql.introspection import (
-    DatabaseIntrospection as PostgresDatabaseIntrospection,
+from django.contrib.gis.db.backends.postgis.introspection import (
+    PostGISIntrospection as PostgresDatabaseIntrospection,
 )
+from django.db.backends.base.introspection import TableInfo
 from django.db.models import Index
 
 

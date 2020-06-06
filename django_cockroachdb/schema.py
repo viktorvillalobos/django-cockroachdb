@@ -1,7 +1,8 @@
-from django.db.backends.base.schema import BaseDatabaseSchemaEditor
-from django.db.backends.postgresql.schema import (
-    DatabaseSchemaEditor as PostgresDatabaseSchemaEditor,
+
+from django.contrib.gis.db.backends.postgis.schema import (
+    PostGISSchemaEditor as PostgresDatabaseSchemaEditor,
 )
+from django.db.backends.base.schema import BaseDatabaseSchemaEditor
 from django.db.backends.utils import strip_quotes
 from django.db.models import ForeignKey
 

@@ -1,5 +1,6 @@
 import datetime
 
+from django.contrib.gis.db.models.functions import Distance, Length, Perimeter
 from django.db.models import (
     DateTimeField, DecimalField, FloatField, IntegerField,
 )
@@ -52,3 +53,7 @@ def register_functions():
     Coalesce.as_cockroachdb = coalesce
     StrIndex.as_cockroachdb = StrIndex.as_postgresql
     When.as_cockroachdb = when
+    # GIS functions
+    Distance.as_cockroachdb = Distance.as_postgresql
+    Length.as_cockroachdb = Length.as_postgresql
+    Perimeter.as_cockroachdb = Perimeter.as_postgresql

@@ -17,6 +17,42 @@ class DatabaseCreation(PostgresDatabaseCreation):
     def mark_expected_failures(self):
         """Mark tests that don't work on cockroachdb as expected failures."""
         expected_failures = (
+            # ST_AsText output different from PostGIS (extra space):
+            # https://github.com/cockroachdb/cockroach/issues/53651
+            'gis_tests.geoapp.test_functions.GISFunctionsTests.test_aswkt',
+            # Unsupported ~= (same_as/exact) operator.
+            'gis_tests.geoapp.tests.GeoLookupTest.test_equals_lookups',
+            'gis_tests.geoapp.tests.GeoLookupTest.test_null_geometries_excluded_in_lookups',
+            'gis_tests.relatedapp.tests.RelatedGeoModelTest.test06_f_expressions',
+            # unknown signature: st_union(geometry, geometry)
+            # https://github.com/cockroachdb/cockroach/issues/49064
+            'gis_tests.distapp.tests.DistanceTest.test_dwithin',
+            'gis_tests.geoapp.test_functions.GISFunctionsTests.test_diff_intersection_union',
+            'gis_tests.geoapp.test_functions.GISFunctionsTests.test_union_mixed_srid',
+            'gis_tests.geoapp.test_functions.GISFunctionsTests.test_union',
+            'gis_tests.geoapp.tests.GeoLookupTest.test_relate_lookup',
+            # Time zone issue with dates before 1883:
+            # https://github.com/cockroachdb/cockroach/issues/54294
+            'gis_tests.geoapp.test_regress.GeoRegressionTests.test_unicode_date',
+            # st_intersection() returns POINT EMPTY instead of
+            # GEOMETRYCOLLECTION EMPTY.
+            # https://github.com/cockroachdb/cockroach/issues/54429
+            'gis_tests.geoapp.test_functions.GISFunctionsTests.test_intersection',
+            # Operators like &>, &<, <<|, @, etc. not supported.
+            'gis_tests.geoapp.tests.GeoLookupTest.test_gis_lookups_with_complex_expressions',
+            # Unsupported @ operator.
+            'gis_tests.geoapp.tests.GeoLookupTest.test_contains_contained_lookups',
+            # unknown signature: st_dwithin(geography, geometry, decimal) (desired <bool>)
+            # https://github.com/cockroachdb/cockroach/issues/53720
+            'gis_tests.geogapp.tests.GeographyTest.test02_distance_lookup',
+            # unknown signature: st_distancespheroid(geometry, geometry, string)
+            # https://github.com/cockroachdb/cockroach/issues/48922#issuecomment-693096502
+            'gis_tests.distapp.tests.DistanceTest.test_distance_lookups_with_expression_rhs',
+            'gis_tests.distapp.tests.DistanceTest.test_geodetic_distance_lookups',
+            'gis_tests.distapp.tests.DistanceFunctionsTests.test_distance_geodetic_spheroid',
+            # st_lengthspheroid(): unimplemented:
+            # https://github.com/cockroachdb/cockroach/issues/48968
+            'gis_tests.distapp.tests.DistanceFunctionsTests.test_length',
             # sum(): unsupported binary operator: <float> + <int>:
             # https://github.com/cockroachdb/django-cockroachdb/issues/73
             'aggregation.tests.AggregateTestCase.test_add_implementation',

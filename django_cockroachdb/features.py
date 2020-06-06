@@ -1,4 +1,4 @@
-from django.db.backends.postgresql.features import (
+from django.contrib.gis.db.backends.postgis.features import (
     DatabaseFeatures as PostgresDatabaseFeatures,
 )
 
@@ -53,3 +53,13 @@ class DatabaseFeatures(PostgresDatabaseFeatures):
     # This can be removed when CockroachDB adds support for NULL FIRST/LAST:
     # https://github.com/cockroachdb/cockroach/issues/6224
     supports_order_by_nulls_modifier = False
+
+    # GIS features
+    supports_3d_storage = False
+    supports_3d_functions = False
+    supports_raster = False
+    supports_left_right_lookups = False  # << and >>
+    # unimplemented: column point is of type geometry and thus is not indexable
+    # HINT:  You have attempted to use a feature that is not yet implemented.
+    # See: https://go.crdb.dev/issue/35730
+    supports_geometry_field_unique_index = False

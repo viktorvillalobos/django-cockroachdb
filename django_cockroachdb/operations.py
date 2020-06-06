@@ -1,8 +1,8 @@
 import time
 from datetime import timedelta
 
-from django.db.backends.postgresql.operations import (
-    DatabaseOperations as PostgresDatabaseOperations,
+from django.contrib.gis.db.backends.postgis.operations import (
+    PostGISOperations as PostgresDatabaseOperations,
 )
 from django.db.utils import OperationalError
 from psycopg2 import errorcodes
@@ -80,3 +80,28 @@ class DatabaseOperations(PostgresDatabaseOperations):
     def sql_flush(self, style, tables, *, reset_sequences=False, allow_cascade=False):
         # CockroachDB doesn't support resetting sequences.
         return super().sql_flush(style, tables, reset_sequences=False, allow_cascade=allow_cascade)
+
+    def postgis_lib_version(self):
+        return '3.0'
+
+    def postgis_version(self):
+        "Return PostGIS version number and compile-time options."
+        return (2, 5)
+
+    @property
+    def gis_operators(self):
+        ops = PostgresDatabaseOperations.gis_operators.copy()
+        # gis_tests.geoapp.tests.GeoLookupTest.test_strictly_above_below_lookups
+        del ops['strictly_above']  # <<|
+        del ops['strictly_below']  # |>>
+        return ops
+
+    unsupported_functions = {
+        'AsGML',  # unknown function: st_asgml(): https://github.com/cockroachdb/cockroach/issues/48877
+        'AsKML',  # unknown signature: st_askml(geometry, int): https://github.com/cockroachdb/cockroach/issues/48881
+        'AsSVG',  # unknown function: st_assvg(): # https://github.com/cockroachdb/cockroach/issues/48883
+        'BoundingCircle',  # unknown function: st_minimumboundingcircle(): https://github.com/cockroachdb/cockroach/issues/48987
+        'GeometryDistance',  # <-> operator
+        'LineLocatePoint',  # unknown function: st_linelocatepoint(): https://github.com/cockroachdb/cockroach/issues/48973
+        'MemSize',  # unknown function: st_memsize(): https://github.com/cockroachdb/cockroach/issues/48985
+    }
