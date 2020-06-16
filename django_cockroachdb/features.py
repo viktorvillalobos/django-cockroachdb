@@ -1,6 +1,7 @@
 from django.db.backends.postgresql.features import (
     DatabaseFeatures as PostgresDatabaseFeatures,
 )
+from django.utils.functional import cached_property
 
 
 class DatabaseFeatures(PostgresDatabaseFeatures):
@@ -53,3 +54,7 @@ class DatabaseFeatures(PostgresDatabaseFeatures):
     # This can be removed when CockroachDB adds support for NULL FIRST/LAST:
     # https://github.com/cockroachdb/cockroach/issues/6224
     supports_order_by_nulls_modifier = False
+
+    @cached_property
+    def is_cockroachdb_20_2(self):
+        return self.connection.cockroachdb_version >= (20, 2)

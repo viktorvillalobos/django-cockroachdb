@@ -78,6 +78,10 @@ class DatabaseCreation(PostgresDatabaseCreation):
             'serializers.test_data.SerializerDataTests.test_python_serializer',
             'serializers.test_data.SerializerDataTests.test_xml_serializer',
             'serializers.test_data.SerializerDataTests.test_yaml_serializer',
+            # https://github.com/cockroachdb/cockroach/issues/49329#issuecomment-664677082
+            'schema.tests.SchemaTests.test_alter',
+            'schema.tests.SchemaTests.test_alter_numeric_field_keep_null_status',
+            'schema.tests.SchemaTests.test_alter_smallint_pk_to_smallautofield_pk',
             # cockroachdb doesn't distinguish between tables and views. Both
             # are included regardless of whether inspectdb's --include-views
             # option is set.
@@ -154,7 +158,19 @@ class DatabaseCreation(PostgresDatabaseCreation):
             'model_fields.test_jsonfield.TestQuerying.test_order_grouping_custom_decoder',
             'model_fields.test_jsonfield.TestQuerying.test_ordering_by_transform',
             'model_fields.test_jsonfield.TestQuerying.test_ordering_grouping_by_key_transform',
+            # unsupported binary operator: <string> -> <string> (desired <jsonb>)
+            # regression in 20.2 alpha 2.
+            # https://github.com/cockroachdb/cockroach/issues/52043
+            'model_fields.test_jsonfield.TestQuerying.test_contains_contained_by_with_key_transform',
+            'model_fields.test_jsonfield.TestQuerying.test_key_transform_raw_expression',
         )
+        if not self.connection.features.is_cockroachdb_20_2:
+            expected_failures += (
+                # CharField max_length is ignored. CharField is introspected as
+                # TextField.
+                'introspection.tests.IntrospectionTests.test_get_table_description_col_lengths',
+            )
+
         for test_name in expected_failures:
             test_case_name, _, method_name = test_name.rpartition('.')
             test_app = test_name.split('.')[0]
