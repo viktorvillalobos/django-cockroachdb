@@ -62,6 +62,12 @@ class DatabaseWrapper(PostgresDatabaseWrapper):
         # method is a no-op.
         pass
 
+    def init_connection_state(self):
+        super().init_connection_state()
+        if self.features.is_cockroachdb_20_2:
+            with self.connection.cursor() as cursor:
+                cursor.execute('SET enable_experimental_alter_column_type_general = true')
+
     def chunked_cursor(self):
         return self.cursor()
 
