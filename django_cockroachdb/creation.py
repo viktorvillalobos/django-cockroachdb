@@ -78,10 +78,6 @@ class DatabaseCreation(PostgresDatabaseCreation):
             'serializers.test_data.SerializerDataTests.test_python_serializer',
             'serializers.test_data.SerializerDataTests.test_xml_serializer',
             'serializers.test_data.SerializerDataTests.test_yaml_serializer',
-            # https://github.com/cockroachdb/cockroach/issues/49329#issuecomment-664677082
-            'schema.tests.SchemaTests.test_alter',
-            'schema.tests.SchemaTests.test_alter_numeric_field_keep_null_status',
-            'schema.tests.SchemaTests.test_alter_smallint_pk_to_smallautofield_pk',
             # cockroachdb doesn't distinguish between tables and views. Both
             # are included regardless of whether inspectdb's --include-views
             # option is set.
