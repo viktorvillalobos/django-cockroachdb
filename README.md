@@ -97,11 +97,14 @@ You can use `cockroach sql --insecure` on the command line to get a SQL prompt.
       `unsupported binary operator: <int> / <int> (desired <int>)`
    4. [The power() database function doesn't accept negative exponents](https://github.com/cockroachdb/django-cockroachdb/issues/22):
       `power(): integer out of range`
-   5. The `StdDev` and `Variance` aggregates
-      [aren't supported](https://github.com/cockroachdb/django-cockroachdb/issues/25).
-   6. [sum() doesn't support arguments of different types](https://github.com/cockroachdb/django-cockroachdb/issues/73):
+   5. [sum() doesn't support arguments of different types](https://github.com/cockroachdb/django-cockroachdb/issues/73):
       `sum(): unsupported binary operator: <float> + <int>`
-   7. [greatest() doesn't support arguments of different types](https://github.com/cockroachdb/django-cockroachdb/issues/74):
+   6. [greatest() doesn't support arguments of different types](https://github.com/cockroachdb/django-cockroachdb/issues/74):
       `greatest(): expected <arg> to be of type <type>, found type <other type>`
-   8. [`SmallAutoField` generates values that are too large for any corresponding foreign keys](https://github.com/cockroachdb/django-cockroachdb/issues/84).
-   9. [The `SHA224` and `SHA384` database functions aren't supported](https://github.com/cockroachdb/django-cockroachdb/issues/81).
+   7. [`SmallAutoField` generates values that are too large for any corresponding foreign keys](https://github.com/cockroachdb/django-cockroachdb/issues/84).
+   8. [The `SHA224` and `SHA384` database functions aren't supported](https://github.com/cockroachdb/django-cockroachdb/issues/81).
+
+## Additional issues and limitations in CockroachDB 20.1.x
+
+1. The `StdDev` and `Variance` aggregates
+  [aren't supported](https://github.com/cockroachdb/django-cockroachdb/issues/25).

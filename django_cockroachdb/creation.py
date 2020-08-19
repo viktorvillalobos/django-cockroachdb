@@ -24,10 +24,6 @@ class DatabaseCreation(PostgresDatabaseCreation):
             # greatest(): expected avg(price) to be of type float, found type
             # decimal: https://github.com/cockroachdb/django-cockroachdb/issues/74
             'aggregation.tests.AggregateTestCase.test_expression_on_aggregation',
-            # stddev/variance functions not supported:
-            # https://github.com/cockroachdb/django-cockroachdb/issues/25
-            'aggregation.test_filter_argument.FilteredAggregateTests.test_filtered_numerical_aggregates',
-            'aggregation_regress.tests.AggregationTests.test_stddev',
             # POWER() doesn't support negative exponents:
             # https://github.com/cockroachdb/django-cockroachdb/issues/22
             'db_functions.math.test_power.PowerTests.test_integer',
@@ -149,14 +145,13 @@ class DatabaseCreation(PostgresDatabaseCreation):
             'model_fields.test_jsonfield.TestQuerying.test_order_grouping_custom_decoder',
             'model_fields.test_jsonfield.TestQuerying.test_ordering_by_transform',
             'model_fields.test_jsonfield.TestQuerying.test_ordering_grouping_by_key_transform',
-            # unsupported binary operator: <string> -> <string> (desired <jsonb>)
-            # regression in 20.2 alpha 2.
-            # https://github.com/cockroachdb/cockroach/issues/52043
-            'model_fields.test_jsonfield.TestQuerying.test_contains_contained_by_with_key_transform',
-            'model_fields.test_jsonfield.TestQuerying.test_key_transform_raw_expression',
         )
         if not self.connection.features.is_cockroachdb_20_2:
             expected_failures += (
+                # stddev/variance functions not supported:
+                # https://github.com/cockroachdb/django-cockroachdb/issues/25
+                'aggregation.test_filter_argument.FilteredAggregateTests.test_filtered_numerical_aggregates',
+                'aggregation_regress.tests.AggregationTests.test_stddev',
                 # CharField max_length is ignored. CharField is introspected as
                 # TextField.
                 'introspection.tests.IntrospectionTests.test_get_table_description_col_lengths',

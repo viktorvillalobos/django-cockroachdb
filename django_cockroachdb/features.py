@@ -1,3 +1,5 @@
+import operator
+
 from django.db.backends.postgresql.features import (
     DatabaseFeatures as PostgresDatabaseFeatures,
 )
@@ -55,6 +57,13 @@ class DatabaseFeatures(PostgresDatabaseFeatures):
     # https://github.com/cockroachdb/cockroach/issues/6224
     supports_order_by_nulls_modifier = False
 
+    # CockroachDB stopped creating indexes on foreign keys in 20.2.
+    indexes_foreign_keys = property(operator.attrgetter('is_not_cockroachdb_20_2'))
+
     @cached_property
     def is_cockroachdb_20_2(self):
         return self.connection.cockroachdb_version >= (20, 2)
+
+    @cached_property
+    def is_not_cockroachdb_20_2(self):
+        return self.connection.cockroachdb_version < (20, 2)
