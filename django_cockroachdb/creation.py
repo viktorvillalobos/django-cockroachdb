@@ -140,6 +140,10 @@ class DatabaseCreation(PostgresDatabaseCreation):
             'model_fields.test_jsonfield.TestQuerying.test_order_grouping_custom_decoder',
             'model_fields.test_jsonfield.TestQuerying.test_ordering_by_transform',
             'model_fields.test_jsonfield.TestQuerying.test_ordering_grouping_by_key_transform',
+            # ERROR: verify-idx-count: index "recent_article_idx" is a partial
+            # index that does not contain all the rows needed to execute this
+            # query: https://github.com/cockroachdb/cockroach/issues/54819
+            'indexes.tests.PartialIndexTests.test_is_null_condition',
         )
         if not self.connection.features.is_cockroachdb_20_2:
             expected_failures += (
