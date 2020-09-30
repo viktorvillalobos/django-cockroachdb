@@ -131,6 +131,11 @@ class DatabaseCreation(PostgresDatabaseCreation):
             # cockroachdb doesn't support changing the primary key of table.
             'schema.tests.SchemaTests.test_alter_not_unique_field_to_primary_key',
             'schema.tests.SchemaTests.test_primary_key',
+            # type conversion from VARCHAR(255) to VARCHAR(255) COLLATE sv
+            # requires overwriting existing values which is not yet implemented:
+            # https://github.com/cockroachdb/cockroach/issues/9851
+            'schema.tests.SchemaTests.test_alter_field_db_collation',
+            'schema.tests.SchemaTests.test_alter_field_type_and_db_collation',
             # SmallAutoField doesn't work:
             # https://github.com/cockroachdb/cockroach-django/issues/84
             'bulk_create.tests.BulkCreateTests.test_bulk_insert_nullable_fields',
@@ -157,6 +162,12 @@ class DatabaseCreation(PostgresDatabaseCreation):
             'model_fields.test_jsonfield.TestQuerying.test_order_grouping_custom_decoder',
             'model_fields.test_jsonfield.TestQuerying.test_ordering_by_transform',
             'model_fields.test_jsonfield.TestQuerying.test_ordering_grouping_by_key_transform',
+            # db_collation appears even if none is specified:
+            # https://github.com/cockroachdb/cockroach/issues/54989
+            'inspectdb.tests.InspectDBTestCase.test_field_types',
+            # CharField.max_length reported as -1 on columns with a collation.
+            # https://github.com/cockroachdb/cockroach/issues/54990
+            'inspectdb.tests.InspectDBTestCase.test_char_field_db_collation',
         )
         for test_name in expected_failures:
             test_case_name, _, method_name = test_name.rpartition('.')

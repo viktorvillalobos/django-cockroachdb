@@ -62,3 +62,11 @@ class DatabaseFeatures(PostgresDatabaseFeatures):
     # This can be removed when CockroachDB adds support for NULL FIRST/LAST:
     # https://github.com/cockroachdb/cockroach/issues/6224
     supports_order_by_nulls_modifier = False
+
+    test_collations = {
+        # PostgresDatabaseFeatures uses 'sv-x-icu' for 'non_default' but
+        # CockroachDB doesn't introspect that properly:
+        # https://github.com/cockroachdb/cockroach/issues/54817
+        'non_default': 'sv',
+        'swedish_ci': 'sv-x-icu',
+    }
